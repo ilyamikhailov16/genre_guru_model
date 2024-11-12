@@ -90,7 +90,7 @@ def train(model, train_loader, valid_loader, loss_function, optimizer, epochs, d
 
 def accuracy(model, valid_loader, device):
     model.eval()
-    metric = MulticlassAccuracy(num_classes=10)  
+    metric = MulticlassAccuracy()  
     with torch.no_grad():  
         for X_batch, y_batch in valid_loader:
             X_batch, y_batch = X_batch.to(device), y_batch.to(device)

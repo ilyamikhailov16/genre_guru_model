@@ -100,8 +100,8 @@ else:
 print(f"Using device: ", device)
 
 train_dataset = AudiosDataset(
-    "GT-Music-Genre/train.csv",
-    "GT-Music-Genre",
+    ".../train.csv",
+    "...",
     NUM_SAMPLES,
     SAMPLE_RATE,
     get_melspectrogram,
@@ -110,8 +110,8 @@ train_dataset = AudiosDataset(
 )
 
 valid_dataset = AudiosDataset(
-    "GT-Music-Genre/valid.csv",
-    "GT-Music-Genre",
+    ".../valid.csv",
+    "...",
     NUM_SAMPLES,
     SAMPLE_RATE,
     get_melspectrogram,

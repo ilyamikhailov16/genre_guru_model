@@ -102,34 +102,35 @@ def accuracy(model, valid_loader, device):
     return metric.compute()  
 
 
-model = Model().to(device)
+if __name__ == "__main__":
+    model = Model().to(device)
+    # model.load_state_dict(torch.load('model.pth', weights_only=True))
+    loss_function = nn.CrossEntropyLoss()
+    learning_rate = 0.001  # 2e-5, 2e-4
+    optimizer = optim.Adam(model.parameters(), lr=learning_rate)
+    epoch = 60
 
-loss_function = nn.CrossEntropyLoss()
-learning_rate = 0.001  # 2e-5, 2e-4
-optimizer = optim.Adam(model.parameters(), lr=learning_rate)
-epoch = 10
+    pytorch_total_params = sum(p.numel() for p in model.parameters())
+    print(f"Total parameters: {pytorch_total_params}")
+    # pytorch_total_trainable_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
 
-pytorch_total_params = sum(p.numel() for p in model.parameters())
-print(f"Total parameters: {pytorch_total_params}")
-# pytorch_total_trainable_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
+    model, train_losses, val_losses = train(
+        model, train_loader, valid_loader, loss_function, optimizer, epoch, device
+    )
 
-model, train_losses, val_losses = train(
-    model, train_loader, valid_loader, loss_function, optimizer, epoch, device
-)
+    torch.save(model.state_dict(), "model.pth")
 
-torch.save(model.state_dict(), "model.pth")
+    accuracy_score = accuracy(model, valid_loader, device)
+    print(f"Accuracy score: {accuracy_score}")
 
-accuracy_score = accuracy(model, valid_loader, device)
-print(f"Accuracy score: {accuracy_score}")
-
-plt.figure(figsize=(10, 5))
-plt.plot(train_losses, label="Train loss", color="red")
-plt.plot(val_losses, label="Validation loss", color="blue")
-plt.xlabel("Epochs")
-plt.ylabel("Loss value")
-plt.legend()
-plt.show()
+    plt.figure(figsize=(10, 5))
+    plt.plot(train_losses, label="Train loss", color="red")
+    plt.plot(val_losses, label="Validation loss", color="blue")
+    plt.xlabel("Epochs")
+    plt.ylabel("Loss value")
+    plt.legend()
+    plt.show()
 
 
-# model = Model() 
-# model.load_state_dict(torch.load('model.pth'))
+    # model = Model() 
+    # model.load_state_dict(torch.load('model.pth'))
